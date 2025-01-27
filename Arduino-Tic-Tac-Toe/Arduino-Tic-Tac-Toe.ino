@@ -4,6 +4,7 @@
 // Arduino ShiftPWM library: https://github.com/elcojacobs/ShiftPWM
 // minimax (AI) based on https://github.com/Prajwal-P/TicTacToe-with-AI 
 //
+const int spkrPWM = 5;
 const int ShiftPWM_latchPin = 2;
 const bool ShiftPWM_invertOutputs = false;
 const bool ShiftPWM_balanceLoad = false;
@@ -17,6 +18,7 @@ const int playFadeSpeed = 500;
 
 const char playSymbol[2] = {'X', 'O'}; // Characters used for the terminal
 const byte playColors[2][3] = {{255,0,0}, {0,255,0}}; // player colors in RGB
+const unsigned int playerSound[2][2] = {{262, 250}, {349,250}}; // player turn sounds {duration, time}
 const byte optionBrightness = 20; // set the brightness for displaying the options
 const int endFadeSpeed = 700; // speed that the none winning positions fade down
 const int playerBrightness =100; // brightness of the player selection leds
@@ -294,9 +296,39 @@ void glowOptions() {
         if (gameEnded)
           brightness = 0;
         else {
+          noTone(spkrPWM);
+          tone(spkrPWM, playerSound[turn][0], playerSound[turn][1]);
         }
         setRGB(i * 3 + j, playColors[turn], playFadeSpeed, brightness);
       }
+}
+void looseSound() { // blocking since when a note is off, it is noticable!
+  noTone(spkrPWM);
+  tone(spkrPWM, 392, 250);
+  delay(250);
+  tone(spkrPWM, 262, 500);
+}
+
+void victorySound() { // blocking since when a note is off, it is noticable!
+  noTone(spkrPWM);
+  tone(spkrPWM, 523, 133);
+  delay(133);
+  tone(spkrPWM, 523, 133);
+  delay(133);
+  tone(spkrPWM, 523, 133);
+  delay(133);
+  tone(spkrPWM, 523, 400);
+  delay(400);
+  tone(spkrPWM, 415, 400);
+  delay(400);
+  tone(spkrPWM, 466, 400);
+  delay(400);
+  tone(spkrPWM, 523, 133);
+  delay(133);
+  delay(133);
+  tone(spkrPWM, 466, 133);
+  delay(133);
+  tone(spkrPWM, 523, 1200);
 }
 
 byte gameDraw() {
@@ -530,6 +562,7 @@ void setup() {
   for ( byte i = 0; i < 11; ++i ) {
     pinMode(btns[i], INPUT_PULLUP);
   }
+  pinMode(spkrPWM, OUTPUT);
   Serial.print("Welcome to Digital Tic Tac Toe, created by TinyNewt\n");
 }
 
@@ -607,6 +640,7 @@ void loop() {
           gameEnded = gameOver();
         if (gameEnded) {
           // computer wins or a draw
+          looseSound();
           state = 20;
         } else {
           showAvailablePositions();
@@ -630,10 +664,12 @@ void loop() {
           gameEnded = gameDraw();
           if (gameEnded) {
             //game draw
+            looseSound();
           } else {
             gameEnded = gameOver();
             if (gameEnded) {
               // human wins
+              victorySound();
             }
           }
           
@@ -674,10 +710,12 @@ void loop() {
           showBoard();
           gameEnded = gameDraw();
           if (gameEnded) {
+            looseSound();
           } else  {
             gameEnded = gameOver();
             if (gameEnded) {
               // player wins
+              victorySound();
             }
           }
           if (gameEnded) {
