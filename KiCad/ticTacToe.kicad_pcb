@@ -9613,7 +9613,7 @@
 		(descr "1110U1Q 1110TNP 1110U2A 1110U0Q Potentiometer, horizontal, Alps RK163 Single, https://tech.alpsalpine.com/prod/e/pdf/potentiometer/rotarypotentiometers/rk16/rk16.pdf")
 		(tags "Potentiometer horizontal Alps RK163 Single")
 		(property "Reference" "RV1"
-			(at 7.65 -2.7 360)
+			(at 7.65 -2.7 0)
 			(layer "F.SilkS")
 			(uuid "ce5dcac9-afe9-472e-ac6a-d2dddfb6ac2a")
 			(effects
@@ -9962,15 +9962,15 @@
 			(pintype "passive")
 			(uuid "a838f901-4336-457c-aacd-2c88a7505bff")
 		)
-		(model "${KICAD8_3DMODEL_DIR}/Potentiometer_THT.3dshapes/Potentiometer_Alps_RK163_Single_Horizontal.wrl"
+		(model "${KIPRJMOD}/3d/RES-ADJ-TH_RK1631110U1Q.wrl"
 			(offset
-				(xyz 0 0 0)
+				(xyz 4.5 -5 12)
 			)
 			(scale
 				(xyz 1 1 1)
 			)
 			(rotate
-				(xyz 0 0 0)
+				(xyz 0 0 -180)
 			)
 		)
 	)
